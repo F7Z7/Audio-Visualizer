@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
             self.button_layout.addWidget(buttons)
 
         for layout in [self.visualizer_layout, self.button_layout]:
-            self.main_layout.addWidget(layout)
+            self.main_layout.addLayout(layout)
 
     def start_visualization(self):
         pass
