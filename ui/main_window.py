@@ -8,7 +8,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Audio Visualizer")
-        self.resize(500, 500)
+        self.resize(800, 800)
         self.initUI()
         self.show()
         self.stream_started=False
