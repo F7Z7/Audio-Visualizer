@@ -11,7 +11,7 @@ class AudioStream:
     def start(self):
         self.stream=sd.InputStream(channels=1, samplerate=self.sample_rate,
                        blocksize=self.chunk_size,
-                       callback=self._audio_callback).start()
+                       callback=self._audio_callback)
         self.stream.start()
 
 
