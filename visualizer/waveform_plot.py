@@ -8,6 +8,7 @@ class WaveformPlot(PlotWidget):
         self.setLabel('bottom', 'Time', units='samples')
         self.setLabel('left', 'Amplitude')
         self.curve = self.plot(pen='c')
+        self.setAntialiasing(True)
 
     def update_plot(self,data):
         self.curve.setData(data)
