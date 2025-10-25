@@ -5,7 +5,8 @@ import pyqtgraph as pg
 class WaveformPlot(PlotWidget):
     def __init__(self):
         super().__init__()
-        self.setYRange(-1,1)
+        self.setLabel('bottom', 'Time', units='samples')
+        self.setLabel('left', 'Amplitude')
         self.curve = self.plot(pen='c')
 
     def update_plot(self,data):

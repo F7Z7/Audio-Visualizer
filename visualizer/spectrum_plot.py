@@ -5,8 +5,10 @@ import pyqtgraph as pg
 class SpectrumPlot(PlotWidget):
     def __init__(self):
         super().__init__()
+        self.setLabel('bottom', 'Frequency', units='Hz')
+        self.setLabel('left', 'Magnitude')
         self.setLogMode(x=False, y=True)
-        self.curve = self.plot(pen='r')
+        self.curve = self.plot(pen='y')
 
-    def update_plot(self,fft_vals):
-        self.curve.setData(fft_vals)
+    def update_plot(self, fft_vals, fft_freqs):
+        self.curve.setData(fft_freqs, fft_vals)
