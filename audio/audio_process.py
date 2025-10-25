@@ -1,8 +1,13 @@
 import numpy as np
 
 
+def compute_fft(audio_chunk, sample_rate=44100):
+    n = len(audio_chunk)
+    fft_vals = np.fft.fft(audio_chunk)
+    fft_freq = np.fft.fftfreq(n, 1 / sample_rate)
 
-def compute_fft(audioFile):
-    fft_vals = np.fft.fft(audioFile)
-    fft_freq = np.fft.fftfreq(len(audioFile))
-    return np.abs(fft_vals[:len(fft_vals) // 2]), fft_freq[:len(fft_freq) // 2]
+
+    positive_freqs = fft_freq[:n // 2]
+    magnitude = np.abs(fft_vals[:n // 2])
+
+    return magnitude, positive_freqs
