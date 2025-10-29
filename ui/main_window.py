@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QComboBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QComboBox, QFileDialog, \
+    QLineEdit
 from visualizer.waveform_plot import WaveformPlot
 from visualizer.spectrum_plot import SpectrumPlot
 from audio.audio_stream import AudioStream
@@ -35,6 +36,13 @@ class MainWindow(QMainWindow):
         self.select_input_method.addItems(["Live Input","Upload From Device"])
         self.select_input_method.currentIndexChanged.connect(self.on_input_method_changed)
 
+        self.select_audio_file=QPushButton("Select Audio File")
+        self.select_audio_file.clicked.connect(self.audio_input_file)
+        self.select_audio_file.setEnabled(False)
+        self.audio_file_path=QLineEdit()
+        self.audio_file_path.setEnabled(False)
+
+
             # button layout
         self.button_layout = QHBoxLayout()
         self.start_button = QPushButton("Start")
@@ -43,7 +51,7 @@ class MainWindow(QMainWindow):
         self.start_button.clicked.connect(self.start_visualization)
         self.stop_button.clicked.connect(self.stop_visualization)
 
-        for buttons in [self.select_input_method,self.start_button, self.stop_button]:
+        for buttons in [self.select_input_method,self.select_audio_file,self.audio_file_path,self.start_button, self.stop_button]:
             self.button_layout.addWidget(buttons)
 
         for layout in [self.visualizer_layout, self.button_layout]:
@@ -51,8 +59,13 @@ class MainWindow(QMainWindow):
 
     def on_input_method_changed(self, index):
         self.audio_input = (index == 0)
+        self.select_audio_file.setEnabled(True)
+        # self.audio_file_path.setEnabled(True)
 
-
+    def audio_input_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Audio File", "", "Audio Files (*.wav *.mp3)")
+        if file_path:
+            self.audio_file_path.setText(file_path)
     def start_visualization(self):
         if not self.stream_started and self.audio_input:
             self.audio_stream.start()
