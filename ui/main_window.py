@@ -64,19 +64,21 @@ class MainWindow(QMainWindow):
         # self.audio_file_path.setEnabled(True)
 
     def audio_input_file(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, "Select Audio File", "", "Audio Files (*.wav *.mp3)")
-        if file_path:
-            self.audio_file_path.setText(file_path)
+        self.file_path, _ = QFileDialog.getOpenFileName(self, "Select Audio File", "", "Audio Files (*.wav *.mp3)")
+        if self.file_path:
+            self.audio_file_path.setText(self.file_path)
     def start_visualization(self):
         if not self.stream_started and self.audio_input:
             self.audio_stream.start()
             self.stream_started=True
         else:
-            self.audio_file_input=AudioFileInput(file_path=self.audio_file_path, callback=self.update_plots)
+            self.audio_file_input=AudioFileInput(audio_file_path=self.file_path, callback=self.update_plots)
             self.stream_started = True
-            self.audio_stream.start()
+            self.audio_file_input.start()
     def stop_visualization(self):
         self.audio_stream.stop()
+        if self.audio_input:
+            self.audio_file_input.stop()
         self.stream_started=False
 
 
