@@ -4,6 +4,7 @@ from visualizer.waveform_plot import WaveformPlot
 from visualizer.spectrum_plot import SpectrumPlot
 from audio.audio_stream import AudioStream
 from audio.audio_process import compute_fft
+from audio.audio_file_input import AudioFileInput
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -70,6 +71,10 @@ class MainWindow(QMainWindow):
         if not self.stream_started and self.audio_input:
             self.audio_stream.start()
             self.stream_started=True
+        else:
+            self.audio_file_input=AudioFileInput(file_path=self.audio_file_path, callback=self.update_plots)
+            self.stream_started = True
+            self.audio_stream.start()
     def stop_visualization(self):
         self.audio_stream.stop()
         self.stream_started=False
