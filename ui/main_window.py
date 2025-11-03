@@ -68,7 +68,7 @@ class MainWindow(QMainWindow):
         if self.file_path:
             self.audio_file_path.setText(self.file_path)
     def start_visualization(self):
-        if not self.stream_started and self.audio_input:
+        if not self.stream_started and not self.audio_input:
             self.audio_stream.start()
             self.stream_started=True
         else:
