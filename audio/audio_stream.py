@@ -31,7 +31,6 @@ class AudioStream:
 
     def _audio_callback(self, indata, frames, time, status):
         if self.callback:
-            self.callback(indata[:, 0])
             mono = indata.mean(axis=1)
             self.callback(mono)
 
