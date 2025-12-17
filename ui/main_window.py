@@ -94,26 +94,35 @@ class MainWindow(QMainWindow):
         self.main_layout.addWidget(visualizer_group, 1)
 
     def create_control_buttons(self):
-
         control_group = QGroupBox("Controls")
         self.button_layout = QHBoxLayout()
 
         self.start_button = QPushButton("▶ Start")
+        self.pause_button = QPushButton("⏸ Pause")
         self.stop_button = QPushButton("⬛ Stop")
-        self.start_button.setMinimumHeight(40)
-        self.stop_button.setMinimumHeight(40)
+        self.reset_button = QPushButton("↻ Reset View")
+
+        for btn in [self.start_button, self.pause_button, self.stop_button, self.reset_button]:
+            btn.setMinimumHeight(40)
+            btn.setStyleSheet("QPushButton { font-weight: bold; }")
 
         self.start_button.clicked.connect(self.start_visualization)
         self.stop_button.clicked.connect(self.stop_visualization)
+        self.pause_button.clicked.connect(self.pause_visualization)
+        self.reset_button.clicked.connect(self.reset_view)
+
+        self.pause_button.setEnabled(False)
         self.stop_button.setEnabled(False)
 
         # Add some styling
         self.start_button.setStyleSheet("QPushButton { font-weight: bold; }")
         self.stop_button.setStyleSheet("QPushButton { font-weight: bold; }")
+        self.pause_button.setStyleSheet("QPushButton { font-weight: bold; }")
 
         self.button_layout.addStretch()
         self.button_layout.addWidget(self.start_button)
         self.button_layout.addWidget(self.stop_button)
+        self.button_layout.addWidget(self.pause_button)
         self.button_layout.addStretch()
 
         control_group.setLayout(self.button_layout)
@@ -146,25 +155,31 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(f"Selected: {file_path}")
 
     def start_visualization(self):
-
+        """Start or resume visualization"""
         if self.stream_started:
+            # Resume if paused
+            if getattr(self, "is_paused", False):
+                self.is_paused = False
+                if self.audio_input_live:
+                    self.audio_stream.resume()  # implement resume in AudioStream
+                else:
+                    self.audio_file_input.resume()  # implement resume in AudioFileInput
+                self.start_button.setEnabled(False)
+                self.pause_button.setEnabled(True)
+                self.statusBar().showMessage("▶ Resumed")
             return
 
         try:
             if self.audio_input_live:
-
                 if not self.audio_stream:
                     self.audio_stream = AudioStream(callback=self.update_plots)
                 self.audio_stream.start()
                 self.statusBar().showMessage("🎤 Recording from microphone...")
-
             else:
-
                 if not self.file_path:
                     QMessageBox.warning(self, "No File Selected",
                                         "Please select an audio file first.")
                     return
-
                 self.audio_file_input = AudioFileInput(
                     audio_file_path=self.file_path,
                     callback=self.update_plots
@@ -174,6 +189,7 @@ class MainWindow(QMainWindow):
 
             self.stream_started = True
             self.start_button.setEnabled(False)
+            self.pause_button.setEnabled(True)
             self.stop_button.setEnabled(True)
             self.select_input_method.setEnabled(False)
             self.select_audio_file.setEnabled(False)
@@ -181,6 +197,21 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to start: {str(e)}")
             self.statusBar().showMessage("Error starting visualization")
+
+
+    def pause_visualization(self):
+        """Pause visualization"""
+        if not self.stream_started or getattr(self, "is_paused", False):
+            return
+
+        self.is_paused = True
+        self.start_button.setEnabled(True)
+        self.pause_button.setEnabled(False)
+        if self.audio_input_live:
+            self.audio_stream.pause()  # implement pause in AudioStream
+        else:
+            self.audio_file_input.pause()  # implement pause in AudioFileInput
+        self.statusBar().showMessage("⏸ Paused")
 
     def stop_visualization(self):
 
@@ -226,6 +257,12 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"Error updating plots: {e}")
+
+    def reset_view(self):
+        """Reset zoom / axes for both plots"""
+        self.time_domain_graph.enableAutoRange()
+        self.freq_domain_graph.enableAutoRange()
+        self.statusBar().showMessage("View reset")
 
     def closeEvent(self, event):
 
