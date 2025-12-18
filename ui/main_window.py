@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
         for btn in [self.start_button, self.pause_button, self.stop_button, self.reset_button]:
             btn.setMinimumHeight(40)
             btn.setStyleSheet("QPushButton { font-weight: bold; }")
+            self.button_layout.addWidget(btn)
 
         self.start_button.clicked.connect(self.start_visualization)
         self.stop_button.clicked.connect(self.stop_visualization)
@@ -114,16 +115,10 @@ class MainWindow(QMainWindow):
         self.pause_button.setEnabled(False)
         self.stop_button.setEnabled(False)
 
-        # Add some styling
-        self.start_button.setStyleSheet("QPushButton { font-weight: bold; }")
-        self.stop_button.setStyleSheet("QPushButton { font-weight: bold; }")
-        self.pause_button.setStyleSheet("QPushButton { font-weight: bold; }")
+
 
         self.button_layout.addStretch()
-        self.button_layout.addWidget(self.start_button)
-        self.button_layout.addWidget(self.stop_button)
-        self.button_layout.addWidget(self.pause_button)
-        self.button_layout.addStretch()
+
 
         control_group.setLayout(self.button_layout)
         self.main_layout.addWidget(control_group)
@@ -260,8 +255,8 @@ class MainWindow(QMainWindow):
 
     def reset_view(self):
         """Reset zoom / axes for both plots"""
-        self.time_domain_graph.enableAutoRange()
-        self.freq_domain_graph.enableAutoRange()
+        self.time_domain_graph.reset_range()
+        self.freq_domain_graph.reset_range()
         self.statusBar().showMessage("View reset")
 
     def closeEvent(self, event):

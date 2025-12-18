@@ -13,3 +13,6 @@ class SpectrumPlot(PlotWidget):
 
     def update_plot(self, fft_vals, fft_freqs):
         self.curve.setData(fft_freqs, fft_vals)
+
+    def reset_range(self):
+        self.enableAutoRange()

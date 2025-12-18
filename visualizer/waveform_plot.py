@@ -12,3 +12,6 @@ class WaveformPlot(PlotWidget):
 
     def update_plot(self,data):
         self.curve.setData(data)
+
+    def reset_range(self):
+        self.enableAutoRange()
