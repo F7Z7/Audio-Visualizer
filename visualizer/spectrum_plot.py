@@ -12,7 +12,8 @@ class SpectrumPlot(PlotWidget):
         self.setAntialiasing(True)
 
     def update_plot(self, fft_vals, fft_freqs):
-        self.curve.setData(fft_freqs, fft_vals)
+        mask = fft_freqs <= 20000
+        self.curve.setData(fft_freqs[mask], fft_vals[mask])
 
     def reset_range(self):
         self.enableAutoRange()
