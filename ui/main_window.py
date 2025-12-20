@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         method_layout = QHBoxLayout()
         method_label = QLabel("Input Method:")
         self.select_input_method = QComboBox()
-        self.select_input_method.addItems(["Live Microphone Input", "Audio File from Device"])
+        self.select_input_method.addItems(["Live Device Input", "Audio File from Device"])
         self.select_input_method.currentIndexChanged.connect(self.on_input_method_changed)
 
         method_layout.addWidget(method_label)
