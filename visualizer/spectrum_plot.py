@@ -3,7 +3,7 @@ import pyqtgraph as pg
 
 #this is for the freq domain graph
 class SpectrumPlot(PlotWidget):
-    def __init__(self):
+    def __init__(self,sample_rate=44100):
         super().__init__()
         self.setLabel('bottom', 'Frequency', units='Hz')
         self.setLabel('left', 'Magnitude')
