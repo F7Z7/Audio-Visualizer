@@ -264,6 +264,8 @@ class MainWindow(QMainWindow):
         self.select_input_method.setCurrentIndex(0)
         self.select_audio_file.setEnabled(False)
         self.audio_file_path.clear()
+        self.time_domain_graph.reset_range()
+        self.freq_domain_graph.reset_range()
 
         self.statusBar().showMessage("Reset complete")
 
