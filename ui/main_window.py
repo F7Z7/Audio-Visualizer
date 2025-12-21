@@ -160,7 +160,7 @@ class MainWindow(QMainWindow):
                 if not self.audio_stream:
                     self.audio_stream = AudioStream(callback=self.update_plots)
                 self.audio_stream.start()
-                self.statusBar().showMessage("🎤 Recording from microphone...")
+                self.statusBar().showMessage(" Recording from microphone...")
             else:
                 if not self.file_path:
                     QMessageBox.warning(self, "No File Selected",
