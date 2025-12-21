@@ -100,14 +100,16 @@ class MainWindow(QMainWindow):
         self.start_button = QPushButton(" Start")
         self.stop_button = QPushButton(" Stop")
         self.reset_button = QPushButton(" Reset View")
+        self.reset_plot_button=QPushButton("Reset Plot")
 
-        for btn in [self.start_button, self.stop_button, self.reset_button]:
+        for btn in [self.start_button, self.stop_button,self.reset_plot_button, self.reset_button]:
             btn.setMinimumHeight(40)
             btn.setStyleSheet("QPushButton { font-weight: bold; }")
             self.button_layout.addWidget(btn)
 
         self.start_button.clicked.connect(self.start_visualization)
         self.stop_button.clicked.connect(self.stop_visualization)
+        self.reset_plot_button.clicked.connect(self.reset_visualization)
         self.reset_button.clicked.connect(self.reset_view)
 
         self.stop_button.setEnabled(False)
@@ -235,6 +237,35 @@ class MainWindow(QMainWindow):
         self.time_domain_graph.reset_range()
         self.freq_domain_graph.reset_range()
         self.statusBar().showMessage("View reset")
+
+    def reset_visualization(self):
+        # Stop everything
+        if self.audio_stream:
+            self.audio_stream.stop()
+            self.audio_stream = None
+
+        if self.audio_file_input:
+            self.audio_file_input.stop()
+            self.audio_file_input = None
+
+        # Reset flags
+        self.stream_started = False
+        self.audio_input_live = True
+        self.file_path = None
+
+        # Clear plots
+        self.time_domain_graph.clear_plot()
+        self.freq_domain_graph.clear_plot()
+
+        # Reset UI
+        self.start_button.setEnabled(True)
+        self.stop_button.setEnabled(False)
+        self.select_input_method.setEnabled(True)
+        self.select_input_method.setCurrentIndex(0)
+        self.select_audio_file.setEnabled(False)
+        self.audio_file_path.clear()
+
+        self.statusBar().showMessage("Reset complete")
 
     def closeEvent(self, event):
 

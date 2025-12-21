@@ -15,3 +15,6 @@ class WaveformPlot(PlotWidget):
 
     def reset_range(self):
         self.enableAutoRange()
+
+    def clear_plot(self):
+        self.curve.clear()
